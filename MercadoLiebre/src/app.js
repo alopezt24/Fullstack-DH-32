@@ -1,10 +1,12 @@
 // ************ Require's ************
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const express = require('express');
 const logger = require('morgan');
 const path = require('path');
 const methodOverride =  require('method-override'); // Pasar poder usar los métodos PUT y DELETE
+const auth = require('./middlewares/auth');
 
 // ************ express() - (don't touch) ************
 const app = express();
@@ -14,8 +16,16 @@ app.use(express.static(path.join(__dirname, '../public')));  // Necesario para l
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use(express.json());
+
+// Sesiones y cookies
+app.use(session({
+  secret: 'sticker wizzard',
+  resave: false,
+  saveUninitialized: true,
+}));
 app.use(cookieParser());
 app.use(methodOverride('_method')); // Pasar poder pisar el method="POST" en el formulario por PUT y DELETE
+app.use(auth);
 
 // ************ Template Engine - (don't touch) ************
 app.set('view engine', 'ejs');
@@ -37,9 +47,12 @@ app.set('views', path.join(__dirname, '/views')); // Define la ubicación de la 
 
 const mainRouter = require('./routes/main'); // Rutas main
 const productsRouter = require('./routes/products'); // Rutas /products
+const userRouter = require('./routes/userRouter'); // Rutas /products
+
 
 app.use('/', mainRouter);
 app.use('/products', productsRouter);
+app.use('/users', userRouter);
 
 
 

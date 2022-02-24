@@ -36,9 +36,19 @@
 			</ul>
 
 			<ul class="right-navbar">
-				<li><a href="#">Creá tu cuenta <i class="far fa-address-card"></i></a></li>
-				<li><a href="#">Ingresá <i class="fas fa-sign-in-alt"></i></a></li>
-				<li><a href="#">Mis compras <i class="fas fa-shopping-basket"></i></a></li>
+				<% if (!user) { %>
+				<li><a href="/users/login">login<i class="fas fa-sign-in-alt"></i></a></li>
+				<li><a href="/users/register">Registrarme <i class="far fa-address-card"></i></a></li>
+				<% } %>
+
+				<li>
+					<form action="/users/logout" method="POST" class="form is-inline">
+						<a class="menu-logout" onclick="this.closest('form').submit();return false;"><i class="fas fa-sign-out-alt"></i></a>
+					</form>
+				</li>
+				<% if (user) { %>
+				<li><a class="menu-profile" href="/users/profile">Perfil<i></i></a></li>
+					<% } %>
 			</ul>
 		</nav>
 	</div>

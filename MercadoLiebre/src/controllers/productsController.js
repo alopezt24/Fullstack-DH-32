@@ -37,7 +37,8 @@ const controller = {
 		
         const errors = validationResult(req);
 
-		res.cookie('color','rojo')
+		//res.cookie('color','rojo')
+		console.log(errors.errors);
 		
 		if (!errors.isEmpty()) {
             return res.render('product-create-form', { errors: errors.mapped(), old: req.body })
